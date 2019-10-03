@@ -25,6 +25,7 @@ public struct PhoneNumber: Codable {
     public let nationalNumber: UInt64
     public let numberExtension: String?
     public let type: PhoneNumberType
+    public let regionID: String?
 }
 
 extension PhoneNumber : Equatable {
@@ -40,19 +41,26 @@ extension PhoneNumber : Equatable {
 
 extension PhoneNumber : Hashable {
 
-    public var hashValue: Int {
-        return countryCode.hashValue ^ nationalNumber.hashValue ^ leadingZero.hashValue ^ (numberExtension?.hashValue ?? 0)
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(countryCode)
+        hasher.combine(nationalNumber)
+        hasher.combine(leadingZero)
+        if let numberExtension = numberExtension {
+            hasher.combine(numberExtension)
+        } else {
+            hasher.combine(0)
+        }
     }
 
 }
 
-extension PhoneNumber{
-    
-    public static func notPhoneNumber() -> PhoneNumber{
-        return PhoneNumber(numberString: "", countryCode: 0, leadingZero: false, nationalNumber: 0, numberExtension: nil, type: .notParsed)
+extension PhoneNumber {
+
+    public static func notPhoneNumber() -> PhoneNumber {
+        return PhoneNumber(numberString: "", countryCode: 0, leadingZero: false, nationalNumber: 0, numberExtension: nil, type: .notParsed, regionID: nil)
     }
-    
-    public func notParsed() -> Bool{
+
+    public func notParsed() -> Bool {
         return type == .notParsed
     }
 }
@@ -65,11 +73,11 @@ public extension PhoneNumber {
     - Parameter rawNumber: String to be parsed to phone number struct.
     */
     @available(*, unavailable, message: "use PhoneNumberKit instead to produce PhoneNumbers")
-    public init(rawNumber: String) throws {
+    init(rawNumber: String) throws {
         assertionFailure(PhoneNumberError.deprecated.localizedDescription)
         throw PhoneNumberError.deprecated
     }
-    
+
     /**
     DEPRECATED.
     Parse a string into a phone number object using custom region. Can throw.
@@ -77,10 +85,8 @@ public extension PhoneNumber {
     - Parameter region: ISO 639 compliant region code.
     */
     @available(*, unavailable, message: "use PhoneNumberKit instead to produce PhoneNumbers")
-    public init(rawNumber: String, region: String) throws {
+    init(rawNumber: String, region: String) throws {
         throw PhoneNumberError.deprecated
     }
 
 }
-
-

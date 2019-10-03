@@ -4,7 +4,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 # PhoneNumberKit
-Swift 4.2 framework for parsing, formatting and validating international phone numbers.
+Swift 5.0 framework for parsing, formatting and validating international phone numbers.
 Inspired by Google's libphonenumber.
 
 [Migrating from PhoneNumberKit 0.x? See the migration guide.](https://github.com/marmelroy/PhoneNumberKit/blob/master/Documentation/OXMIGRATIONGUIDE.md)  
@@ -73,7 +73,17 @@ phoneNumberKit.format(phoneNumber, toType: .national) // (02) 3661 8300
 
 To use the AsYouTypeFormatter, just replace your UITextField with a PhoneNumberTextField (if you are using Interface Builder make sure the module field is set to PhoneNumberKit).
 
-PhoneNumberTextField automatically formats phone numbers and gives the user full editing capabilities. If you want to customize you can use the PartialFormatter directly. The default region code is automatically computed but can be overridden if needed.  
+PhoneNumberTextField automatically formats phone numbers and gives the user full editing capabilities. If you want to customize you can use the PartialFormatter directly. The default region code is automatically computed but can be overridden if needed (see the example given below).
+```swift
+class MyGBTextField: PhoneNumberTextField {
+    override var defaultRegion: String {
+        get {
+            return "GB"
+        }
+        set {} // exists for backward compatibility
+    }
+}
+```
 
 ![AsYouTypeFormatter](http://i.giphy.com/3o6gbgrudyCM8Ak6yc.gif)
 
@@ -109,5 +119,5 @@ github "marmelroy/PhoneNumberKit"
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PhoneNumberKit)
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-pod 'PhoneNumberKit', '~> 2.5'
+pod 'PhoneNumberKit', '~> 3.0'
 ```
